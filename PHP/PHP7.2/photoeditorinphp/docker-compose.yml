@@ -20,6 +20,8 @@ services:
       - ./dockerPHP/myPHPconfig.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
+    depends_on: 
+      - nginx_server
   #Nginx Service
   nginx_server:
     container_name: nginx_server
