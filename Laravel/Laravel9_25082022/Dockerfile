@@ -1,3 +1,5 @@
+#04092022: Dockerfile for Laravel project with `vendor` directory (dependencies installed)
+#04092022: To run Laravel project without project dependencies installed already, run composer install manually
 FROM devilbox/php-fpm-8.0:latest
 
 # Copy composer.lock and composer.json
