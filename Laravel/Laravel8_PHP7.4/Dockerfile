@@ -25,6 +25,10 @@ RUN install-php-extensions zip
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Copy existing application directory permissions
+# https://stackoverflow.com/questions/48619445/permission-denied-error-using-laravel-docker
+# This method use less image size
+COPY --chown=www-data:www-data . /var/www
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
