@@ -41,7 +41,7 @@ services:
 
   #MySQL Service
   mysql_service:
-    image: mysql:5.7.22
+    image: mysql:5.7
     container_name: mysql_service
     restart: unless-stopped
     tty: true
