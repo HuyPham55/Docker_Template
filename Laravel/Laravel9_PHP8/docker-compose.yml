@@ -74,6 +74,7 @@ services:
       - app-network
     depends_on:
       - mysql_service
+
   cache_service:
     image: redis:alpine
     container_name: cache_service
