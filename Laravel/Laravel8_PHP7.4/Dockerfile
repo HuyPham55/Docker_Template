@@ -27,8 +27,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Copy existing application directory permissions
 # https://stackoverflow.com/questions/48619445/permission-denied-error-using-laravel-docker
-# This method use less image size
-COPY --chown=www-data:www-data . /var/www
+# https://stackoverflow.com/questions/4917811/file-put-contents-failed-to-open-stream-permission-denied
+# chown uses less image size
+# COPY --chown=www-data:www-data . /var/www
+ADD --chown=www-data:www-data . /var/www
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
