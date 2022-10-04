@@ -49,7 +49,6 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    container_name: phpmyadmin
     restart: unless-stopped
     ports:
       - 8080:80
