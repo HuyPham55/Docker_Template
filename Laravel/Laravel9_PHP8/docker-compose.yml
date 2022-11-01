@@ -48,6 +48,7 @@ services:
     ports:
       - "3306:3306"
     environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       SERVICE_TAGS: dev
@@ -65,6 +66,7 @@ services:
     ports:
       - "8080:80"
     environment:
+      - UPLOAD_LIMIT=100000000
       - PMA_ARBITRARY=0
       - PMA_PORT=3306
       - PMA_HOST=mysql_service
@@ -84,6 +86,8 @@ services:
       - app-network
     ports:
       - "6382:6379"
+    restart: always
+
     #https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker/
 
 
