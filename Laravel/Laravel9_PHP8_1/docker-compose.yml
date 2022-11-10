@@ -1,0 +1,82 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: devilbox/php-fpm-8.0
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    networks:
+      - app-network
+    depends_on:
+      - webserver
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+    #MySQL Service
+  mysql_service:
+      image: mysql:5.7
+      restart: unless-stopped
+      tty: true
+      ports:
+          - "3306:3306"
+      environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_DATABASE: ${DB_DATABASE}
+          MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+          SERVICE_TAGS: dev
+          SERVICE_NAME: mysql
+      volumes:
+          - database_data:/var/lib/mysql
+          - ./mysql/my.cnf:/etc/mysql/my.cnf
+      networks:
+          - app-network
+
+  phpmyadmin:
+      image: phpmyadmin
+      restart: always
+      ports:
+          - "8080:80"
+      environment:
+          - UPLOAD_LIMIT=100000000
+          - PMA_ARBITRARY=0
+          - PMA_PORT=3306
+          - PMA_HOST=mysql_service
+          - PMA_USER=${DB_USERNAME}
+          - PMA_PASSWORD=${DB_PASSWORD}
+      networks:
+          - app-network
+      depends_on:
+          - mysql_service
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+#Volumes
+volumes:
+  database_data:
+    driver: local

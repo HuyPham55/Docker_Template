@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install exif
 
-#https://github.com/mlocati/docker-php-extension-installer
+# https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions zip
 
