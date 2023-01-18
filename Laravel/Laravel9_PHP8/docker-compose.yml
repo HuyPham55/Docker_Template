@@ -58,7 +58,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    restart: always
+    restart: unless-stopped
     ports:
       - "8080:80"
     environment:
@@ -82,7 +82,7 @@ services:
       - app-network
     ports:
       - "6382:6379"
-    restart: always
+    restart: unless-stopped
 
     #https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker/
 
