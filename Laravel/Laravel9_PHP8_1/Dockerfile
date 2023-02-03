@@ -10,6 +10,7 @@ COPY composer.json /var/www/
 WORKDIR /var/www
 
 #28042022: Change user to root (super user)
+#[pool www] 'user' directive is ignored when FPM is not running as root
 USER root
 
 # Install dependencies
