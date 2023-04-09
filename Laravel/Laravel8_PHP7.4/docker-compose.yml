@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+
+    # Stop using this version. php:7.4-fpm consume 4.4GB which is not worth it
     image: php:7.4-fpm
     restart: unless-stopped
     tty: true
