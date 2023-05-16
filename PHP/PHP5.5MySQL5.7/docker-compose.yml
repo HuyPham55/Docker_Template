@@ -57,7 +57,7 @@ services:
     networks:
       - app-network
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin:5.2.1
     restart: unless-stopped
     ports:
       - "8080:80"

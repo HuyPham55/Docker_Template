@@ -2,35 +2,27 @@ version: '3'
 services:
 
   #PHP Service
-  app:
+  php:
     build:
       context: .
       dockerfile: Dockerfile
-    image: devilbox/php-fpm-8.0
+    image: php:7.4-fpm-alpine
     restart: unless-stopped
     tty: true
+    working_dir: /var/www
     volumes:
       - ./:/var/www
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
-    working_dir: /var/www
     networks:
       - app-network
-    depends_on:
-      - webserver
-      - cache_service
-      - mysql_service
 
   #Nginx Service
-  webserver:
+  nginx:
     image: nginx:alpine
     restart: unless-stopped
     tty: true
     ports:
       - "8000:80"
-      - "443:443"
     volumes:
       - ./:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
@@ -38,8 +30,8 @@ services:
       - app-network
 
   #MySQL Service
-  mysql_service:
-    image: mysql:5.7
+  mysql:
+    image: mysql:8.0
     restart: unless-stopped
     tty: true
     ports:
@@ -62,35 +54,22 @@ services:
     ports:
       - "8080:80"
     environment:
-      - UPLOAD_LIMIT=100000000
       - PMA_ARBITRARY=0
       - PMA_PORT=3306
-      - PMA_HOST=mysql_service
-      - PMA_USER=${DB_USERNAME}
+      - PMA_HOST=mysql
+      - PMA_USER=root
       - PMA_PASSWORD=${DB_PASSWORD}
     networks:
       - app-network
     depends_on:
-      - mysql_service
-
-  cache_service:
-    image: redis:alpine
-    command: redis-server --appendonly yes
-    volumes:
-      - ./data/redis:/data
-    networks:
-      - app-network
-    ports:
-      - "6382:6379"
-    restart: unless-stopped
-
-    #https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker/
-
+      - mysql
 
 #Docker Networks
 networks:
   app-network:
     driver: bridge
+
+
 #Volumes
 volumes:
   database_data:
