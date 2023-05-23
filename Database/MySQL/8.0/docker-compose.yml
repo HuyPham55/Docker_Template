@@ -1,0 +1,45 @@
+version: '3'
+services:
+  #MySQL Service
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - UPLOAD_LIMIT=100000000
+      - PMA_ARBITRARY=0
+      - PMA_PORT=3306
+      - PMA_HOST=mysql
+      - PMA_USER=root
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+
+#Volumes
+volumes:
+  database_data:
+    driver: local
