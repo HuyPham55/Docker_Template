@@ -1,0 +1,23 @@
+version: '3'
+services:
+  #MySQL Service
+  mysql:
+    image: mysql:8.0.42
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+      MYSQL_ALLOW_EMPTY_PASSWORD: false
+      # MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_USER: "laravel"
+      MYSQL_PASSWORD: "laravel"
+      MYSQL_DATABASE: "laravel"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+#Volumes
+volumes:
+  database_data:
+    driver: local
