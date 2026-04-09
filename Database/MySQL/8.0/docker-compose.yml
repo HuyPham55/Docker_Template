@@ -28,10 +28,21 @@ services:
       - PMA_PORT=3306
       - PMA_HOST=mysql
       - PMA_USER=root
+      - UPLOAD_LIMIT=300M
     networks:
       - app-network
     depends_on:
       - mysql
+
+  redis:
+      image: redis:7.4.0-alpine
+      command: redis-server --appendonly yes --requirepass "redis"
+      volumes:
+      - ./redis/data:/data
+      ports:
+        - "8002:6379"
+      networks:
+      - app-network
 
 #Docker Networks
 networks:
